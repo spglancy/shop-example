@@ -5,55 +5,61 @@ import './App.css';
 
 class App extends Component {
 
-  constructor(props){
-    super(props)
-    this.state = {
-      active: '',
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            active: [],
+        }
     }
-  }
 
-  getCategories() {
-      return categories.map((cat) => {
-        return <Button cat={cat} onClick={() => this.handleClick(cat)} />
-      })
-  }
+    getCategories() {
+        return categories.map((cat) => {
+            return <Button cat = { cat }
+            onClick = {
+                () => this.handleClick(cat) }
+            />
+        })
+    }
 
-  handleClick(cat) {
-    this.setState({active: cat})
-    console.log(cat)
-    console.log(this.state.active)
-  }
+    handleClick(cat) {
+        const selected = this.state.active
+        if(selected.indexOf(cat)) {
+            selected.pop(cat)
+            console.log(selected)
+        } else {
+            selected.push(cat)
+            console.log("push")
+            console.log(selected)
+        }
+        this.setState({ active: selected })
+    }
 
-  getInventory() {
-    const items = inventory.filter((item) => {
-      return item.category = this.state.active
-    })
-    return items.map(({ id, name, price }) => {
-      return(
-        <div key={id}>
-          <h1>{name}</h1>
-          <p>{price}</p>
-        </div>
-      )
-    })
-  }
+    getInventory() {
+        inventory.filter((item) => {
+            return this.state.active.indexOf(item.category) || this.state.active === []
+        })
 
-  render() {
-    return (
-      <div className="App">
-        <h1>Show products here</h1>
+        return inventory.map(({ id, name, price }) => {
+            return (<div key = { id }>
+                        <h1> { name } </h1>
+                        <p> { price } </p> 
+                    </div>
+            )
+        })
+    }
 
-        <ul>
-          {this.getCategories()}
-        </ul>
+    render() {
+        return (<div className = "App">
+                    <h1> Show products here </h1>
 
-        <div>
-          {this.getInventory()}
-        </div>
+                    <ul> { this.getCategories() } </ul>
 
-      </div>
-    );
-  }
+                    <div> { this.getInventory() } </div>
+
+                </div>
+        );
+    }
 }
 
 export default App;
