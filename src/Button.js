@@ -1,8 +1,9 @@
 import React from  'react'
 
 function Button(props) {
+
     return(
-        <button onClick={props.onClick}>{props.cat}</button>
+        <button className = { props.selected } onClick={props.onClick}>{props.cat}</button>
     ) 
 }
 

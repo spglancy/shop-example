@@ -5,7 +5,6 @@ import './App.css';
 
 class App extends Component {
 
-
     constructor(props) {
         super(props)
         this.state = {
@@ -15,33 +14,29 @@ class App extends Component {
 
     getCategories() {
         return categories.map((cat) => {
-            return <Button cat = { cat }
-            onClick = {
-                () => this.handleClick(cat) }
-            />
+            const active = this.state.active.indexOf(cat) >= 0 ? "selected": ""
+            return <Button selected = { active } key = { cat } cat = { cat } onClick = { () => this.handleClick(cat) } />
         })
     }
 
     handleClick(cat) {
         const selected = this.state.active
-        if(selected.indexOf(cat)) {
-            selected.pop(cat)
-            console.log(selected)
-        } else {
+        const index = selected.indexOf(cat)
+        if(index >= 0) {
+            selected.splice(index, 1)
+        } else if(index < 0){
             selected.push(cat)
-            console.log("push")
-            console.log(selected)
         }
         this.setState({ active: selected })
     }
 
     getInventory() {
-        inventory.filter((item) => {
-            return this.state.active.indexOf(item.category) || this.state.active === []
+        const items = inventory.filter((item) => {
+            return this.state.active.indexOf(item.category) >= 0 || this.state.active.length === 0
         })
 
-        return inventory.map(({ id, name, price }) => {
-            return (<div key = { id }>
+        return items.map(({ id, name, price }) => {
+            return (<div className = "product" key = { id }>
                         <h1> { name } </h1>
                         <p> { price } </p> 
                     </div>
@@ -55,7 +50,7 @@ class App extends Component {
 
                     <ul> { this.getCategories() } </ul>
 
-                    <div> { this.getInventory() } </div>
+                    <div className = "products"> { this.getInventory() } </div>
 
                 </div>
         );
